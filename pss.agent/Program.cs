@@ -29,12 +29,13 @@ namespace pss.agent
 					JObject order = JsonConvert.DeserializeObject<JObject> (Encoding.UTF8.GetString(message.Body));
 					var path = Path.Combine($"{order["ExternalId"]}.json");
 					Console.WriteLine($"Got a message with id: {order["ExternalId"]}. ({path})");
-					
+
 					BlobClient blob = container.GetBlobClient($"{order["ExternalId"]}.content.json");
 					var info = await blob.DownloadAsync();
 
 					StreamWriter outputFile = new StreamWriter(path);
 					await outputFile.WriteAsync(await new StreamReader(info.Value.Content).ReadToEndAsync());
+					outputFile.Close();
 				},
 				(error) =>
 				{
