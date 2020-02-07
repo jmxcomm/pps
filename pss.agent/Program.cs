@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Microsoft.Azure.ServiceBus;
@@ -13,13 +12,12 @@ namespace pss.agent
 	class Program
 	{
 		private static readonly string baseDir = Environment.GetEnvironmentVariable("baseDir");
-
 		private static readonly string busConnectionString = Environment.GetEnvironmentVariable("queueConnection");
 		private static readonly string busQueueName = Environment.GetEnvironmentVariable("queueName");
-		private static readonly QueueClient orderQueue = new QueueClient(busConnectionString, busQueueName);
-
 		private static readonly string storageConnectionString = Environment.GetEnvironmentVariable("storageConnection");
 		private static readonly string storageContainerName = Environment.GetEnvironmentVariable("containerName");
+
+		private static readonly QueueClient orderQueue = new QueueClient(busConnectionString, busQueueName);
 		private static readonly BlobServiceClient storage = new BlobServiceClient(storageConnectionString); 
 		private static readonly BlobContainerClient container = storage.GetBlobContainerClient(storageContainerName);
 

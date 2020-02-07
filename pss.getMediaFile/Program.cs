@@ -4,14 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.ServiceBus;
-using Microsoft.IdentityModel.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -20,13 +16,12 @@ namespace pss.getMediaFile
 	class Program
 	{
 		private static readonly string baseDir = Environment.GetEnvironmentVariable("baseDir");
-
 		private static readonly string busConnectionString = Environment.GetEnvironmentVariable("queueConnection");
 		private static readonly string busQueueName = Environment.GetEnvironmentVariable("queueName");
-		private static readonly QueueClient queue = new QueueClient(busConnectionString, busQueueName);
-
 		private static readonly string storageConnectionString = Environment.GetEnvironmentVariable("storageConnection");
 		private static readonly string storageContainerName = Environment.GetEnvironmentVariable("containerName");
+
+		private static readonly QueueClient queue = new QueueClient(busConnectionString, busQueueName);
 		private static readonly BlobServiceClient storage = new BlobServiceClient(storageConnectionString); 
 		private static readonly BlobContainerClient container = storage.GetBlobContainerClient(storageContainerName);
 

@@ -33,8 +33,6 @@ namespace pss.poc
 		public static async Task Status([ServiceBusTrigger("binteqordersstatus", Connection = "queueConnection")]
 			string body, ILogger log)
 		{
-			log.LogInformation($"C# ServiceBus queue trigger function processed message: {body}");
-
 			var order = JsonConvert.DeserializeObject<JObject>(body);
 			BlobClient blob = container.GetBlobClient($"{order["ExternalId"]}.status.json");
 			await blob.UploadAsync(new MemoryStream(Encoding.UTF8.GetBytes(body)), true, CancellationToken.None);
@@ -52,7 +50,6 @@ namespace pss.poc
 		public static async Task Notify([ServiceBusTrigger("binteqordersnotify", Connection = "queueConnection")]
 			string body, ILogger log)
 		{
-			log.LogInformation($"C# ServiceBus queue trigger function processed message: {body}");
 			var orderSpec = JsonConvert.DeserializeObject<JObject>(body);
 
 			BlobClient blob = container.GetBlobClient($"{orderSpec["ExternalId"]}.status.json");
@@ -68,7 +65,6 @@ namespace pss.poc
 
 			HttpClient client = new HttpClient();
 			ByteArrayContent content = new ByteArrayContent(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(payload)));
-			log.LogInformation("url: " + statusNotififcationUrl + "/" + orderStatus["ExternalId"].Value<String>());
 			var response = await client.PostAsync(statusNotififcationUrl + "/" + orderStatus["ExternalId"].Value<String>(), content);
 
 			if ( HttpStatusCode.OK.Equals(response.StatusCode) )
