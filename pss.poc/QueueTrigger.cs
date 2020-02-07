@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -70,7 +71,7 @@ namespace pss.poc
 			log.LogInformation("url: " + statusNotififcationUrl + "/" + orderStatus["ExternalId"].Value<String>());
 			var response = await client.PostAsync(statusNotififcationUrl + "/" + orderStatus["ExternalId"].Value<String>(), content);
 
-			if ( StatusCodes.Status200OK.Equals(response.StatusCode) )
+			if ( HttpStatusCode.OK.Equals(response.StatusCode) )
 			{
 				throw new Exception("Notify failed");
 			}
