@@ -45,7 +45,8 @@ namespace pss.agent
 				}
 			);
 
-			Thread.Sleep(Timeout.Infinite);
+			Console.WriteLine("Press 'q' to quit the sample.");
+			while (Console.Read() != 'q') ;
 		}
 	}
 }
