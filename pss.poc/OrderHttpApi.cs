@@ -50,7 +50,7 @@ namespace pss.poc
 						'type': 'object',
 						'properties': {
 							'Url': { 'type': 'string', 'required': true },
-							'Hash': { 'type': 'string', 'required': true, 'pattern': '[0-9a-f]{32}' }
+							'Hash': { 'type': 'string', 'required': true, 'pattern': '[0-9a-fA-F]{32}' }
 						}
 					}
 				}
