@@ -18,7 +18,7 @@ namespace pss.poc
 	public static class ProductsHttpApi
 	{
 		private static readonly string busConnectionString = Environment.GetEnvironmentVariable("queueConnection");
-		private static readonly string busQueueName = Environment.GetEnvironmentVariable("queueName");
+		private static readonly string busQueueName = Environment.GetEnvironmentVariable("orderQueue");
 		private static readonly QueueClient orderQueue = new QueueClient(busConnectionString, busQueueName);
 
 		private static readonly string storageConnectionString = Environment.GetEnvironmentVariable("storageConnection");

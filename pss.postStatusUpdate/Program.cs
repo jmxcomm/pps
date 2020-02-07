@@ -27,7 +27,6 @@ namespace pss.postStatusUpdate
 				// Add event handlers.
 				watcher.Created += async (source, args) =>
 				{
-					Console.WriteLine($"File: {args.FullPath} {args.ChangeType}");
 					StreamReader outputFile = new StreamReader(args.FullPath);
 					await statusQueue.SendAsync(new Message (Encoding.UTF8.GetBytes(await outputFile.ReadToEndAsync())));
 				};

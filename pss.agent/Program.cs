@@ -12,10 +12,12 @@ namespace pss.agent
 {
 	class Program
 	{
+		private static readonly string baseDir = Environment.GetEnvironmentVariable("baseDir");
+
 		private static readonly string busConnectionString = Environment.GetEnvironmentVariable("queueConnection");
 		private static readonly string busQueueName = Environment.GetEnvironmentVariable("queueName");
 		private static readonly QueueClient orderQueue = new QueueClient(busConnectionString, busQueueName);
-		
+
 		private static readonly string storageConnectionString = Environment.GetEnvironmentVariable("storageConnection");
 		private static readonly string storageContainerName = Environment.GetEnvironmentVariable("containerName");
 		private static readonly BlobServiceClient storage = new BlobServiceClient(storageConnectionString); 
@@ -26,9 +28,8 @@ namespace pss.agent
 			orderQueue.RegisterMessageHandler(
 				async (message, token) =>
 				{
-					JObject order = JsonConvert.DeserializeObject<JObject> (Encoding.UTF8.GetString(message.Body));
-					var path = Path.Combine($"{order["ExternalId"]}.json");
-					Console.WriteLine($"Got a message with id: {order["ExternalId"]}. ({path})");
+					JObject order = JsonConvert.DeserializeObject<JObject>(Encoding.UTF8.GetString(message.Body));
+					var path = Path.Combine(baseDir, $"{order["ExternalId"]}.json");
 
 					BlobClient blob = container.GetBlobClient($"{order["ExternalId"]}.content.json");
 					var info = await blob.DownloadAsync();

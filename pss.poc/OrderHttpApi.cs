@@ -20,8 +20,12 @@ namespace pss.poc
 	public static class OrderHttpApi
 	{
 		private static readonly string busConnectionString = Environment.GetEnvironmentVariable("queueConnection");
-		private static readonly string busQueueName = Environment.GetEnvironmentVariable("queueName");
+
+		private static readonly string busQueueName = Environment.GetEnvironmentVariable("orderQueue");
 		private static readonly QueueClient orderQueue = new QueueClient(busConnectionString, busQueueName);
+
+		private static readonly string downloadQueueName = Environment.GetEnvironmentVariable("downloadQueue");
+		private static readonly QueueClient downloadQueue = new QueueClient(busConnectionString, downloadQueueName);
 
 		private static readonly string storageConnectionString = Environment.GetEnvironmentVariable("storageConnection");
 		private static readonly string storageContainerName = Environment.GetEnvironmentVariable("containerName");
@@ -46,12 +50,13 @@ namespace pss.poc
 						'type': 'object',
 						'properties': {
 							'Url': { 'type': 'string', 'required': true },
-							'Hash': { 'type': 'string', 'required': true }
+							'Hash': { 'type': 'string', 'required': true, 'pattern': '[0-9a-f]{32}' }
 						}
 					}
 				}
 			}
 		}");
+
 		[FunctionName("ORDER_API_PLACE_ORDER")]
 		public static async Task<IActionResult> placeOrder(
 			[HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "orders")]
@@ -103,6 +108,7 @@ namespace pss.poc
 
 				var messageBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(messageBody));
 				await orderQueue.SendAsync(new Message(messageBytes));
+				await downloadQueue.SendAsync(new Message(messageBytes));
 
 				var result = new JObject
 				{
@@ -119,7 +125,18 @@ namespace pss.poc
 				return Error(400, "Failed to place order.", e);
 			}
 		}
-		
+
+		[FunctionName("ORDER_API_FORCE_ORDER_MEDIA_DOWNLOAD")]
+		public static async Task<IActionResult> redownload(
+			[HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "redownload")]
+			HttpRequest req, ILogger log)
+		{
+			JObject orderSpec = JsonConvert.DeserializeObject<JObject>(await new StreamReader(req.Body).ReadToEndAsync());
+			var messageBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(orderSpec));
+			await downloadQueue.SendAsync(new Message(messageBytes));
+			return new OkObjectResult("");
+		}
+
 		public static IActionResult Error(int status, String title, Exception e)
 		{
 			var error = new JObject

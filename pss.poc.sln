@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pss.agent", "pss.agent\pss.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pss.postStatusUpdate", "pss.postStatusUpdate\pss.postStatusUpdate.csproj", "{2C5B85F1-051C-4DAB-B53D-FB1F82D50AD1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pss.getMediaFile", "pss.getMediaFile\pss.getMediaFile.csproj", "{AB214674-7C8B-4AEA-B9DB-6D667C1FF31E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{2C5B85F1-051C-4DAB-B53D-FB1F82D50AD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C5B85F1-051C-4DAB-B53D-FB1F82D50AD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C5B85F1-051C-4DAB-B53D-FB1F82D50AD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB214674-7C8B-4AEA-B9DB-6D667C1FF31E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB214674-7C8B-4AEA-B9DB-6D667C1FF31E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB214674-7C8B-4AEA-B9DB-6D667C1FF31E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB214674-7C8B-4AEA-B9DB-6D667C1FF31E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
